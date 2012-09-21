@@ -47,6 +47,18 @@ DEVICE_PACKAGE_OVERLAYS += device/htc/ace/overlay
 
 PRODUCT_COPY_FILES += \
     frameworks/base/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml \
+    frameworks/base/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
+    frameworks/base/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml \
+    frameworks/base/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
+    frameworks/base/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
+    frameworks/base/data/etc/android.hardware.sensor.accelerometer.xml:system/etc/permissions/android.hardware.sensor.accelerometer.xml \
+    frameworks/base/data/etc/android.hardware.sensor.compass.xml:system/etc/permissions/android.hardware.sensor.compass.xml \
+    frameworks/base/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml \
+    frameworks/base/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
+    frameworks/base/data/etc/android.hardware.touchscreen.multitouch.distinct.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.distinct.xml \
+    frameworks/base/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml \
+    frameworks/base/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml \
+    frameworks/base/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml
 
 # gsm config xml file
 PRODUCT_COPY_FILES += \
@@ -85,7 +97,18 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/htc/ace/firmware/bcm4329.hcd:system/vendor/firmware/bcm4329.hcd \
     device/htc/ace/firmware/default.acdb:system/etc/firmware/default.acdb \
-    device/htc/ace/firmware/default_org.acdb:system/etc/firmware/default_org.acdb
+    device/htc/ace/firmware/default_org.acdb:system/etc/firmware/default_org.acdb \
+    device/htc/ace/firmware/vidc_720p_command_control.fw:system/etc/firmware/vidc_720p_command_control.fw \
+    device/htc/ace/firmware/vidc_720p_h263_dec_mc.fw:system/etc/firmware/vidc_720p_h263_dec_mc.fw \
+    device/htc/ace/firmware/vidc_720p_h264_dec_mc.fw:system/etc/firmware/vidc_720p_h264_dec_mc.fw \
+    device/htc/ace/firmware/vidc_720p_h264_enc_mc.fw:system/etc/firmware/vidc_720p_h264_enc_mc.fw \
+    device/htc/ace/firmware/vidc_720p_mp4_dec_mc.fw:system/etc/firmware/vidc_720p_mp4_dec_mc.fw \
+    device/htc/ace/firmware/vidc_720p_mp4_enc_mc.fw:system/etc/firmware/vidc_720p_mp4_enc_mc.fw \
+    device/htc/ace/firmware/vidc_720p_vc1_dec_mc.fw:system/etc/firmware/vidc_720p_vc1_dec_mc.fw \
+    device/htc/ace/firmware/yamato_pfp.fw:system/etc/firmware/yamato_pfp.fw \
+    device/htc/ace/firmware/yamato_pm4.fw:system/etc/firmware/yamato_pm4.fw \
+    device/htc/ace/firmware/leia_pfp_470.fw:system/etc/firmware/leia_pfp_470.fw \
+    device/htc/ace/firmware/leia_pm4_470.fw:system/etc/firmware/leia_pm4_470.fw
 
 # Audio DSP Profiles
 PRODUCT_COPY_FILES += \
@@ -159,13 +182,61 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_COPY_FILES += \
     device/htc/ace/vold.fstab:system/etc/vold.fstab
+    
+# Camera packages
+PRODUCT_PACKAGES += \
+    camera.spade \
+    Camera
+
+# Audio
+PRODUCT_PACKAGES += \
+    audio.a2dp.default \
+    audio_policy.msm7x30 \
+    audio.primary.msm7x30 \
+    libaudioutils
+
+# Video
+PRODUCT_PACKAGES += \
+    copybit.msm7x30 \
+    gralloc.msm7x30 \
+    hwcomposer.msm7x30 \
+    libgenlock \
+    libmemalloc \
+    liboverlay \
+    libQcomUI \
+    libtilerenderer
+
+# Media
+PRODUCT_PACKAGES += \
+    libstagefrighthw \
+    libOmxCore \
+    libmm-omxcore \
+    libdivxdrmdecrypt \
+    libOmxVdec \
+    libOmxVenc
+    
+# Misc
+PRODUCT_PACKAGES += \
+    com.android.future.usb.accessory
+
+# Live Wallpapers
+PRODUCT_PACKAGES += \
+    LiveWallpapers \
+    LiveWallpapersPicker \
+    VisualizationWallpapers \
+    librs_jni
+
+# Filesystem management tools
+PRODUCT_PACKAGES += \
+    make_ext4fs \
+    setup_fs
 
 # media config xml file
 PRODUCT_COPY_FILES += \
     device/htc/ace/media_profiles.xml:system/etc/media_profiles.xml
 
 ifeq ($(TARGET_PREBUILT_KERNEL),)
-LOCAL_KERNEL := device/htc/msm7x30-common/msm7230/kernel
+LOCAL_KERNEL := device/htc/ace/prebuilt/kernel
 else
 LOCAL_KERNEL := $(TARGET_PREBUILT_KERNEL)
 endif
@@ -174,14 +245,21 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_KERNEL):kernel
 
 PRODUCT_COPY_FILES += \
-    device/htc/msm7x30-common/msm7230/bcm4329.ko:system/lib/modules/bcm4329.ko \
-    device/htc/msm7x30-common/msm7230/qc_pcm_in.ko:system/lib/modules/qc_pcm_in.ko
+    device/htc/ace/prebuilt/bcm4329.ko:system/lib/modules/bcm4329.ko \
+    device/htc/ace/prebuilt/qc_pcm_in.ko:system/lib/modules/qc_pcm_in.ko
+ 
+# we have enough storage space to hold precise GC data
+PRODUCT_TAGS += dalvik.gc.type-precise
+
+# use high-density artwork where available
+PRODUCT_LOCALES += hdpi
+PRODUCT_AAPT_CONFIG := normal hdpi
+PRODUCT_AAPT_PREF_CONFIG := hdpi
+
+PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 
 # stuff common to all HTC phones
 $(call inherit-product, device/htc/common/common.mk)
-
-# common msm7x30 configs
-$(call inherit-product, device/htc/msm7x30-common/msm7x30.mk)
 
 # htc audio settings
 $(call inherit-product, device/htc/ace/media_htcaudio.mk)
